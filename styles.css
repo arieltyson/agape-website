@@ -1,23 +1,101 @@
+/* ==========================================================
+   Design tokens
+   Every size, space and color below comes from this block.
+   ========================================================== */
 :root {
+  /* Color — light appearance */
   --paper: #f3efe6;
   --ink: #1d1b18;
   --muted: #6b655b;
   --rule: #cfc7b8;
   --copper: #a4532a;
+  --focus: #a4532a;
+  color-scheme: light;
+
+  /* Type families */
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  /* Type scale (rem, so it follows the reader's browser text size) */
+  --text-micro: 0.6875rem;   /* 11px — running head, tombstone labels */
+  --text-caption: 0.75rem;   /* 12px — section labels, dates */
+  --text-footnote: 0.8125rem;/* 13px — fine print */
+  --text-small: 0.875rem;    /* 14px — figure captions */
+  --text-callout: 1rem;      /* 16px — secondary lists */
+  --text-body: 1.125rem;     /* 18px */
+  --text-title: 1.25rem;     /* 20px — job titles, deal sizes */
+  --text-figure: 1.375rem;   /* 22px — key figures */
+  --text-lede: 1.3125rem;    /* 21px */
+  --text-display: clamp(3.25rem, 10vw, 7rem);
+
+  /* Line heights */
+  --leading-tight: 0.92;
+  --leading-snug: 1.3;
+  --leading-body: 1.55;
+
+  /* Tracking */
+  --track-display: -0.025em;
+  --track-label: 0.12em;
+  --track-runhead: 0.08em;
+
+  /* Spacing scale (4px base) */
+  --space-1: 0.25rem;  /* 4  */
+  --space-2: 0.5rem;   /* 8  */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.25rem;  /* 20 */
+  --space-6: 1.5rem;   /* 24 */
+  --space-7: 2rem;     /* 32 */
+  --space-8: 2.5rem;   /* 40 */
+  --space-9: 3rem;     /* 48 */
+  --space-10: 3.5rem;  /* 56 */
+  --space-11: 4rem;    /* 64 */
+  --space-12: 4.5rem;  /* 72 */
+  --space-13: 5.5rem;  /* 88 */
+
+  /* Layout */
+  --measure: 38em;
+  --page-width: 61.25rem;    /* 980px */
+  --gutter: var(--space-6);
+  --hairline: 1px;
+  --inset: 6px;              /* tombstone double-rule inset */
+  --date-column: 10rem;
+  --part-marker: 2.125rem;
+  --part-label: 12rem;
+  --hit-target: 44px;        /* Apple HIG minimum touch target */
+
+  /* Motion */
+  --duration-appearance: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Dark appearance — when the system asks for it and the reader hasn't chosen light */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-appearance="light"]) {
     --paper: #171512;
     --ink: #ebe5d9;
     --muted: #9c9486;
     --rule: #3a352d;
     --copper: #d0814f;
+    --focus: #d0814f;
+    color-scheme: dark;
   }
 }
 
+/* Dark appearance — when the reader has chosen it */
+:root[data-appearance="dark"] {
+  --paper: #171512;
+  --ink: #ebe5d9;
+  --muted: #9c9486;
+  --rule: #3a352d;
+  --copper: #d0814f;
+  --focus: #d0814f;
+  color-scheme: dark;
+}
+
+/* ==========================================================
+   Base
+   ========================================================== */
 * { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
@@ -27,8 +105,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 18px;
-  line-height: 1.55;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   font-optical-sizing: auto;
 }
 
@@ -36,277 +114,364 @@ a {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: var(--copper);
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: var(--hairline);
 }
 a:hover { color: var(--copper); }
 
-main, .runhead, footer {
-  max-width: 980px;
-  margin: 0 auto;
-  padding-left: 24px;
-  padding-right: 24px;
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
 
-/* Running header, like the top line of a research note */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+main, .runhead, footer {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* ==========================================================
+   Running header
+   ========================================================== */
 .runhead {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  padding-top: 18px;
-  padding-bottom: 10px;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-1);
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-runhead);
   text-transform: uppercase;
   color: var(--muted);
-  border-bottom: 1px solid var(--ink);
+  border-bottom: var(--hairline) solid var(--ink);
+}
+.runhead-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 
-/* Masthead */
-.masthead { padding: 72px 0 40px; }
+/* Appearance switch: one quiet glyph, full-size touch target */
+.appearance {
+  display: inline-grid;
+  place-items: center;
+  width: var(--hit-target);
+  height: var(--hit-target);
+  margin-right: calc(var(--space-3) * -1);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.appearance:hover { color: var(--copper); }
+.appearance svg {
+  width: 1rem;
+  height: 1rem;
+}
+/* Show the glyph for the appearance you'd switch *to* */
+.appearance .to-dark { display: block; }
+.appearance .to-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-appearance="light"]) .appearance .to-dark { display: none; }
+  :root:not([data-appearance="light"]) .appearance .to-light { display: block; }
+}
+:root[data-appearance="dark"] .appearance .to-dark { display: none; }
+:root[data-appearance="dark"] .appearance .to-light { display: block; }
+
+/* ==========================================================
+   Masthead
+   ========================================================== */
+.masthead { padding: var(--space-12) 0 var(--space-8); }
 
 h1 {
   font-weight: 400;
-  font-size: clamp(52px, 10vw, 112px);
-  line-height: 0.92;
-  letter-spacing: -0.025em;
-  margin: 0 0 36px;
+  font-size: var(--text-display);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--track-display);
+  margin: 0 0 var(--space-7);
 }
 
 .lede {
-  max-width: 38em;
-  font-size: 21px;
+  max-width: var(--measure);
+  font-size: var(--text-lede);
   line-height: 1.5;
-  margin: 0 0 24px;
+  margin: 0 0 var(--space-6);
 }
 
 .contact-line {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--text-footnote);
   margin: 0;
 }
-.contact-line span { color: var(--muted); margin: 0 8px; }
+.contact-line span { color: var(--muted); margin: 0 var(--space-2); }
 
-/* Key figures */
+/* ==========================================================
+   Key figures
+   ========================================================== */
 .figures dl {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin: 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
+  border-top: var(--hairline) solid var(--ink);
+  border-bottom: var(--hairline) solid var(--ink);
 }
-.figures div {
-  padding: 18px 16px 18px 0;
-}
+.figures div { padding: var(--space-4) var(--space-4) var(--space-4) 0; }
 .figures div + div {
-  padding-left: 16px;
-  border-left: 1px solid var(--rule);
+  padding-left: var(--space-4);
+  border-left: var(--hairline) solid var(--rule);
 }
 .figures dt {
   font-family: var(--mono);
-  font-size: 22px;
+  font-size: var(--text-figure);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--copper);
 }
 .figures dd {
-  margin: 4px 0 0;
-  font-size: 14px;
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-small);
   line-height: 1.35;
   color: var(--muted);
 }
 
-/* Sections */
-.block { padding: 64px 0 0; }
+/* ==========================================================
+   Sections
+   ========================================================== */
+.block { padding: var(--space-11) 0 0; }
 
 h2 {
   font-family: var(--mono);
   font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.12em;
+  font-size: var(--text-caption);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
-  margin: 0 0 20px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--rule);
+  margin: 0 0 var(--space-5);
+  padding-bottom: var(--space-2);
+  border-bottom: var(--hairline) solid var(--rule);
 }
 
 h3 {
   font-weight: 500;
-  font-size: 20px;
-  line-height: 1.3;
+  font-size: var(--text-title);
+  line-height: var(--leading-snug);
   margin: 0;
 }
 
 .note {
-  font-size: 14px;
+  font-size: var(--text-small);
   color: var(--muted);
   font-style: italic;
-  margin: -8px 0 20px;
+  margin: calc(var(--space-2) * -1) 0 var(--space-5);
 }
 
-/* Deal tombstones */
+/* ==========================================================
+   Deal tombstones
+   ========================================================== */
 .tombstones {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: var(--space-4);
 }
 .tomb {
-  border: 1px solid var(--ink);
-  outline: 1px solid var(--rule);
-  outline-offset: -6px;
-  padding: 26px 22px 20px;
+  border: var(--hairline) solid var(--ink);
+  outline: var(--hairline) solid var(--rule);
+  outline-offset: calc(var(--inset) * -1);
+  padding: var(--space-6) var(--space-5) var(--space-5);
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-2);
 }
 .tomb p { margin: 0; }
 .tomb-kind {
   font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--muted);
 }
 .tomb-what {
-  font-size: 19px;
+  font-size: var(--text-title);
   line-height: 1.25;
   font-weight: 500;
 }
 .tomb-size {
   font-family: var(--mono);
-  font-size: 20px;
+  font-size: var(--text-title);
   color: var(--copper);
-  padding: 6px 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
+  padding: var(--space-1) 0;
+  border-top: var(--hairline) solid var(--rule);
+  border-bottom: var(--hairline) solid var(--rule);
 }
 .tomb-role {
-  font-size: 14.5px;
+  font-size: var(--text-small);
   line-height: 1.4;
   font-style: italic;
   flex: 1;
 }
 .tomb-foot {
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-runhead);
   color: var(--muted);
 }
 
-/* Project Lodestone */
+/* ==========================================================
+   Project Lodestone
+   ========================================================== */
 .status {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--text-caption);
   color: var(--copper);
-  margin: -6px 0 14px;
+  margin: calc(var(--space-1) * -1) 0 var(--space-3);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .dot {
-  width: 7px;
-  height: 7px;
+  width: var(--space-2);
+  height: var(--space-2);
   background: var(--copper);
   display: inline-block;
 }
-.body-text { max-width: 38em; margin: 0 0 22px; }
+.body-text { max-width: var(--measure); margin: 0 0 var(--space-5); }
 
 .parts {
   list-style: none;
   padding: 0;
   margin: 0;
   counter-reset: part;
-  max-width: 760px;
+  max-width: calc(var(--page-width) * 0.78);
 }
 .parts li {
   counter-increment: part;
   display: grid;
-  grid-template-columns: 34px 190px 1fr;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--rule);
-  font-size: 16px;
+  grid-template-columns: var(--part-marker) var(--part-label) 1fr;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-top: var(--hairline) solid var(--rule);
+  font-size: var(--text-callout);
 }
-.parts li:last-child { border-bottom: 1px solid var(--rule); }
+.parts li:last-child { border-bottom: var(--hairline) solid var(--rule); }
 .parts li::before {
   content: counter(part, upper-alpha) ".";
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--text-footnote);
   color: var(--muted);
-  padding-top: 2px;
+  padding-top: 0.125em;
 }
 .parts li span:first-child { font-weight: 500; }
 .parts li span:last-child { color: var(--muted); }
 
-/* Experience ledger */
+/* ==========================================================
+   Experience ledger
+   ========================================================== */
 .ledger { list-style: none; padding: 0; margin: 0; }
 .ledger li {
   display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 24px;
-  padding: 18px 0;
-  border-top: 1px solid var(--rule);
+  grid-template-columns: var(--date-column) 1fr;
+  gap: var(--space-6);
+  padding: var(--space-4) 0;
+  border-top: var(--hairline) solid var(--rule);
 }
-.ledger li:first-child { border-top: 0; padding-top: 4px; }
-.ledger p { margin: 6px 0 0; max-width: 40em; }
+.ledger li:first-child { border-top: 0; padding-top: var(--space-1); }
+.ledger p { margin: var(--space-1) 0 0; max-width: 40em; }
 .when {
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--text-caption);
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-  padding-top: 4px;
+  padding-top: var(--space-1);
   margin: 0 !important;
 }
 .where {
   font-style: italic;
   color: var(--muted);
-  margin-top: 2px !important;
+  margin-top: 0.125rem !important;
 }
 
-/* Education + credentials */
+/* ==========================================================
+   Education + credentials
+   ========================================================== */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px;
+  gap: var(--space-10);
 }
-.two-col p { margin: 6px 0 0; }
-.h2-gap { margin-top: 36px; }
+.two-col p { margin: var(--space-1) 0 0; }
+.h2-gap { margin-top: var(--space-8); }
 .plain { list-style: none; padding: 0; margin: 0; }
-.plain li { padding: 4px 0; }
-.tools { font-size: 16px; color: var(--muted); }
+.plain li { padding: var(--space-1) 0; }
+.tools { font-size: var(--text-callout); color: var(--muted); }
 
-/* Footer */
+/* ==========================================================
+   Footer
+   ========================================================== */
 footer {
-  margin-top: 88px;
-  padding-top: 18px;
-  padding-bottom: 48px;
-  border-top: 1px solid var(--ink);
-  font-size: 16px;
+  margin-top: var(--space-13);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-9);
+  border-top: var(--hairline) solid var(--ink);
+  font-size: var(--text-callout);
 }
-footer p { margin: 0 0 4px; }
-.fine { font-size: 13px; color: var(--muted); }
+footer p { margin: 0 0 var(--space-1); }
+.fine { font-size: var(--text-footnote); color: var(--muted); }
 
-/* Tablet */
-@media (max-width: 860px) {
+/* ==========================================================
+   Appearance change: a soft cross-fade, skipped for reduced motion
+   ========================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-appearance);
+  animation-timing-function: var(--ease-standard);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* ==========================================================
+   Tablet
+   ========================================================== */
+@media (max-width: 53.75rem) {
   .tombstones { grid-template-columns: repeat(2, 1fr); }
   .figures dl { grid-template-columns: repeat(2, 1fr); }
   .figures div:nth-child(3) { padding-left: 0; border-left: 0; }
-  .figures div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .figures div:nth-child(n+3) { border-top: var(--hairline) solid var(--rule); }
 }
 
-/* Phone */
-@media (max-width: 600px) {
-  body { font-size: 17px; }
-  main, .runhead, footer { padding-left: 16px; padding-right: 16px; }
+/* ==========================================================
+   Phone
+   ========================================================== */
+@media (max-width: 37.5rem) {
+  :root {
+    --text-body: 1.0625rem;
+    --text-lede: 1.1875rem;
+    --gutter: var(--space-4);
+  }
   .runhead-mid { display: none; }
-  .masthead { padding: 48px 0 32px; }
-  .lede { font-size: 19px; }
+  .masthead { padding: var(--space-9) 0 var(--space-7); }
   .tombstones { grid-template-columns: 1fr; }
-  .ledger li { grid-template-columns: 1fr; gap: 4px; }
-  .parts li { grid-template-columns: 28px 1fr; }
-  .parts li span:last-child { grid-column: 2; margin-top: -8px; }
-  .two-col { grid-template-columns: 1fr; gap: 40px; }
-  .block { padding-top: 48px; }
+  .ledger li { grid-template-columns: 1fr; gap: var(--space-1); }
+  .parts li { grid-template-columns: var(--space-7) 1fr; }
+  .parts li span:last-child { grid-column: 2; margin-top: calc(var(--space-2) * -1); }
+  .two-col { grid-template-columns: 1fr; gap: var(--space-8); }
+  .block { padding-top: var(--space-9); }
 }
