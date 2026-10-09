@@ -7,7 +7,7 @@
 </kbd>
 
 ## Project Description 🎨
-Agape Website is the personal portfolio of Md Ashfaqur Rahman, an equity research associate covering mining and consumer equities in Toronto, working toward investment banking and, later, private equity. It's built for one reader: a banker or recruiter with sixty seconds. The page opens with who he is and what he models, follows with a strip of headline figures, and then lists his deal and coverage work as tombstones, the format banks use to mark closed transactions. Below those are Project Lodestone (his copper-gold M&A pitch), his experience and his credentials. The site is a single static page of hand-written HTML and CSS. It has no framework, build step, JavaScript, database or tracking, and GitHub Pages serves the files directly from this repository.
+Agape Website is the personal portfolio of Md Ashfaqur Rahman, an equity research associate covering mining and consumer equities in Toronto, working toward investment banking and, later, private equity. It's built for one reader: a banker or recruiter with sixty seconds. The page opens with who he is and what he models, follows with a strip of headline figures, and then lists his deal and coverage work as tombstones, the format banks use to mark closed transactions. Below those are Project Lodestone (his copper-gold M&A pitch), his experience and his credentials. The site is a single static page of hand-written HTML and CSS, plus a few lines of JavaScript for the light/dark switch. It has no framework, build step, database or tracking, and GitHub Pages serves the files directly from this repository.
 
 ## Screenshots:
 <div style="display: flex; justify-content: center; align-items: center;">
@@ -29,8 +29,8 @@ Agape Website is the personal portfolio of Md Ashfaqur Rahman, an equity researc
 
 ### Frameworks
 - [x] **HTML5** — Semantic markup (`section`, `article`, `dl`, `ol`) so screen readers and search engines read the page in order
-- [x] **CSS3** — Custom properties for theming, CSS Grid for the tombstone and ledger layouts, `prefers-color-scheme` for automatic dark mode
-- [x] **No JavaScript** — The page is fully static, so there's nothing to break or update
+- [x] **CSS3** — Design tokens as custom properties, CSS Grid for the tombstone and ledger layouts, `prefers-color-scheme` for system appearance
+- [x] **Vanilla JavaScript** — `appearance.js` (under 70 lines) powers the light/dark switch; the page reads fine without it
 
 ### APIs & Web Services
 - [x] **GitHub Pages** — Free static hosting, deployed automatically on every push to `main`
@@ -44,9 +44,9 @@ Agape Website is the personal portfolio of Md Ashfaqur Rahman, an equity researc
 
 ## Architecture 🏗️
 - **Pattern**: A single static page. Content lives in `index.html` and presentation in `styles.css`, with no templating layer
-- **State Management**: None; the page has no client-side state
+- **State Management**: One value, the reader's appearance override, kept in `localStorage` only when it differs from the system setting
 - **Navigation**: One scrolling page with anchored sections (`#work`, `#lodestone`, `#experience`, `#education`)
-- **Styling**: Design tokens as CSS custom properties on `:root`, overridden for dark mode; responsive breakpoints at 860px and 600px
+- **Styling**: A single token block on `:root` (color, type scale, spacing, motion), so no raw values are scattered through the stylesheet; dark values apply via `prefers-color-scheme` or `data-appearance`
 - **Target**: Current versions of Chrome, Safari, Firefox and Edge on desktop and mobile; served from GitHub Pages at `https://arieltyson.github.io/agape-website/`
 
 ## Features 🌟
@@ -54,9 +54,10 @@ Agape Website is the personal portfolio of Md Ashfaqur Rahman, an equity researc
 - 📊 **Key figures strip** — Deal sizes and credentials readable at a glance, set in tabular monospace
 - ⛏️ **Project Lodestone** — Status and scope of his copper-gold M&A pitch, ready to link to the deck and dashboard once published
 - 🗂️ **Experience ledger** — Dates in a fixed column, like a research note's history table
-- 🌗 **Automatic dark mode** — Follows the reader's system setting
+- 🌗 **Light and dark appearance** — Follows the system by default; one tap on the sun/moon switches it, and the choice is remembered
 - 📱 **Phone-ready** — Collapses to a single column without losing the layout's character
-- ⚡ **Fast and private** — No scripts, no trackers, no cookies
+- ♿ **Accessible** — 44px touch target, labelled switch, visible keyboard focus, and motion that respects Reduce Motion
+- ⚡ **Fast and private** — No trackers, no cookies, no build step
 
 <div align="center">
 
