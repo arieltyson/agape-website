@@ -1,0 +1,312 @@
+:root {
+  --paper: #f3efe6;
+  --ink: #1d1b18;
+  --muted: #6b655b;
+  --rule: #cfc7b8;
+  --copper: #a4532a;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #171512;
+    --ink: #ebe5d9;
+    --muted: #9c9486;
+    --rule: #3a352d;
+    --copper: #d0814f;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--copper);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover { color: var(--copper); }
+
+main, .runhead, footer {
+  max-width: 980px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* Running header, like the top line of a research note */
+.runhead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 18px;
+  padding-bottom: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--ink);
+}
+
+/* Masthead */
+.masthead { padding: 72px 0 40px; }
+
+h1 {
+  font-weight: 400;
+  font-size: clamp(52px, 10vw, 112px);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  margin: 0 0 36px;
+}
+
+.lede {
+  max-width: 38em;
+  font-size: 21px;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.contact-line {
+  font-family: var(--mono);
+  font-size: 13px;
+  margin: 0;
+}
+.contact-line span { color: var(--muted); margin: 0 8px; }
+
+/* Key figures */
+.figures dl {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.figures div {
+  padding: 18px 16px 18px 0;
+}
+.figures div + div {
+  padding-left: 16px;
+  border-left: 1px solid var(--rule);
+}
+.figures dt {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--copper);
+}
+.figures dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* Sections */
+.block { padding: 64px 0 0; }
+
+h2 {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.note {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+  margin: -8px 0 20px;
+}
+
+/* Deal tombstones */
+.tombstones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.tomb {
+  border: 1px solid var(--ink);
+  outline: 1px solid var(--rule);
+  outline-offset: -6px;
+  padding: 26px 22px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tomb p { margin: 0; }
+.tomb-kind {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tomb-what {
+  font-size: 19px;
+  line-height: 1.25;
+  font-weight: 500;
+}
+.tomb-size {
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--copper);
+  padding: 6px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.tomb-role {
+  font-size: 14.5px;
+  line-height: 1.4;
+  font-style: italic;
+  flex: 1;
+}
+.tomb-foot {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* Project Lodestone */
+.status {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--copper);
+  margin: -6px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  background: var(--copper);
+  display: inline-block;
+}
+.body-text { max-width: 38em; margin: 0 0 22px; }
+
+.parts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: part;
+  max-width: 760px;
+}
+.parts li {
+  counter-increment: part;
+  display: grid;
+  grid-template-columns: 34px 190px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 16px;
+}
+.parts li:last-child { border-bottom: 1px solid var(--rule); }
+.parts li::before {
+  content: counter(part, upper-alpha) ".";
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.parts li span:first-child { font-weight: 500; }
+.parts li span:last-child { color: var(--muted); }
+
+/* Experience ledger */
+.ledger { list-style: none; padding: 0; margin: 0; }
+.ledger li {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+}
+.ledger li:first-child { border-top: 0; padding-top: 4px; }
+.ledger p { margin: 6px 0 0; max-width: 40em; }
+.when {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  padding-top: 4px;
+  margin: 0 !important;
+}
+.where {
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px !important;
+}
+
+/* Education + credentials */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+}
+.two-col p { margin: 6px 0 0; }
+.h2-gap { margin-top: 36px; }
+.plain { list-style: none; padding: 0; margin: 0; }
+.plain li { padding: 4px 0; }
+.tools { font-size: 16px; color: var(--muted); }
+
+/* Footer */
+footer {
+  margin-top: 88px;
+  padding-top: 18px;
+  padding-bottom: 48px;
+  border-top: 1px solid var(--ink);
+  font-size: 16px;
+}
+footer p { margin: 0 0 4px; }
+.fine { font-size: 13px; color: var(--muted); }
+
+/* Tablet */
+@media (max-width: 860px) {
+  .tombstones { grid-template-columns: repeat(2, 1fr); }
+  .figures dl { grid-template-columns: repeat(2, 1fr); }
+  .figures div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .figures div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+
+/* Phone */
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  main, .runhead, footer { padding-left: 16px; padding-right: 16px; }
+  .runhead-mid { display: none; }
+  .masthead { padding: 48px 0 32px; }
+  .lede { font-size: 19px; }
+  .tombstones { grid-template-columns: 1fr; }
+  .ledger li { grid-template-columns: 1fr; gap: 4px; }
+  .parts li { grid-template-columns: 28px 1fr; }
+  .parts li span:last-child { grid-column: 2; margin-top: -8px; }
+  .two-col { grid-template-columns: 1fr; gap: 40px; }
+  .block { padding-top: 48px; }
+}
